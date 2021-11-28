@@ -6,7 +6,7 @@ fn main() {
 
     let mut app = clap::App::new(clap::crate_name!())
         .version(clap::crate_version!())
-        .about("launch bottled shell. replacing login shell")
+        .about("launch a systemd-enabled shell")
         .setting(clap::AppSettings::TrailingVarArg)
         .setting(clap::AppSettings::DontDelimitTrailingValues)
         .setting(clap::AppSettings::AllowLeadingHyphen)

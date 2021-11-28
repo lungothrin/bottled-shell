@@ -13,23 +13,23 @@ fn main() {
         .setting(clap::AppSettings::SubcommandRequired)
         .subcommand(
             clap::SubCommand::with_name("is-inside")
-                .about("Return 0 if invoked from inside of a bottled systemd environment")
+                .about("Return 0 if invoked inside a systemd-enabled namespace")
         )
         .subcommand(
             clap::SubCommand::with_name("is-running")
-                .about("Return 0 if a bottled systemd environment is running")
+                .about("Return 0 if systemd is running")
         )
         .subcommand(
             clap::SubCommand::with_name("start")
-                .about("Start a bottled systemd environment")
+                .about("Start systemd in a Linux namespace(mount, pid)")
         )
         .subcommand(
             clap::SubCommand::with_name("stop")
-                .about("Start running bottled systemd environment")
+                .about("Stop systemd")
         )
         .subcommand(
             clap::SubCommand::with_name("shell")
-                .about("Start running bottled systemd environment")
+                .about("Start a shell inside systemd-enabled namespace using machinectl-shell")
                 .arg(
                     clap::Arg::with_name("shell")
                         .short("s")
