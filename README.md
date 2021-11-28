@@ -35,4 +35,4 @@ username:x:1000:1000::/home/username:/opt/bottled-shell/bin/bottled-bash
 
 3. All done.
 
-Try open a shell from start menu, or open a terminal in VSCode.
+Try open a shell from start menu, or open a Visual Studio Code(Remote - WSL) window.
