@@ -54,7 +54,7 @@ pub fn launch_login_shell(bottled_shell_path: &String, shell: &String, args: &Ve
         let pw_name = unsafe { std::ffi::CStr::from_ptr((*pwent).pw_name) }.to_str().unwrap();
         log::trace!("username acquired: {}(UID={})", pw_name, uid);
 
-        log::info!("associating with bottled systemd");
+        log::trace!("associating with bottled systemd");
         systemd::associate_with_systemd().unwrap();
 
         let executable = systemd::get_machinectl_bin().unwrap();
@@ -62,6 +62,7 @@ pub fn launch_login_shell(bottled_shell_path: &String, shell: &String, args: &Ve
             CString::new("machinectl").unwrap(),
             CString::new("shell").unwrap(),
         ];
+        expanded_args.push(CString::new("-q").unwrap());
         for e in env::get_preserved_env() {
             expanded_args.push(CString::new("-E").unwrap());
             expanded_args.push(CString::new(e).unwrap());

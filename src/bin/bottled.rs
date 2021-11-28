@@ -3,7 +3,7 @@ use bottled_shell::shell;
 
 fn main() {
     if let Err(_) = std::env::var("BOTTLED_SHELL_LOG") {
-        std::env::set_var("BOTTLED_SHELL_LOG", "trace");
+        std::env::set_var("BOTTLED_SHELL_LOG", "info");
     }
     pretty_env_logger::init_custom_env("BOTTLED_SHELL_LOG");
 
@@ -54,22 +54,22 @@ fn main() {
     match matches.subcommand() {
         ("is-inside", _) => {
             if systemd::is_associated_with_systemd() {
-                log::debug!("is-inside=true");
+                log::info!("is-inside=true");
                 std::process::exit(libc::EXIT_SUCCESS);
             } else {
-                log::debug!("is-inside=false");
+                log::info!("is-inside=false");
                 std::process::exit(libc::EXIT_FAILURE);
             }
         }
         ("is-running", _) => {
             if systemd::is_associated_with_systemd() {
-                log::debug!("is-running=true");
+                log::info!("is-running=true");
                 std::process::exit(libc::EXIT_SUCCESS);
             } else if let Ok(Some(pid)) = systemd::get_systemd_pid() {
-                log::debug!("is-running=true, PID={}", pid);
+                log::info!("is-running=true, PID={}", pid);
                 std::process::exit(libc::EXIT_SUCCESS);
             } else {
-                log::debug!("is-running=false");
+                log::info!("is-running=false");
                 std::process::exit(libc::EXIT_FAILURE);
             }
         }
@@ -104,11 +104,11 @@ fn main() {
             }
 
             if !systemd::is_associated_with_systemd() && None == systemd::get_systemd_pid().unwrap() {
-                log::debug!("starting bottled systemd");
+                log::trace!("starting bottled systemd");
                 systemd::start_systemd().unwrap();
             }
 
-            log::info!("starting login shell: {}", shell);
+            log::trace!("starting login shell: {}", shell);
             shell::launch_login_shell(&bottled_shell_path, &shell.to_string(), &args).unwrap();
         }
         _ => unreachable!()

@@ -126,12 +126,12 @@ pub fn start_systemd() -> Result<(), SystemdError> {
     use nix::unistd::ForkResult;
 
     if is_associated_with_systemd() {
-        log::debug!("systemd already started");
+        log::info!("systemd already started");
         return Ok(());
     }
 
     if let Ok(Some(pid)) = get_systemd_pid() {
-        log::debug!("systemd already started, PID={}", pid);
+        log::info!("systemd already started, PID={}", pid);
         return Ok(());
     }
 
@@ -274,7 +274,7 @@ pub fn stop_systemd() -> Result<(), SystemdError> {
     } else if let Some(pid) = get_systemd_pid()? {
         kill_systemd(pid)
     } else {
-        log::debug!("systemd not running");
+        log::info!("systemd not running");
         Ok(())
     }
 }
@@ -289,6 +289,8 @@ fn kill_systemd(pid: libc::pid_t) -> Result<(), SystemdError> {
         log::trace!("removing {}", PID_FILE);
         std::fs::remove_file(PID_FILE)?;
     }
+
+    log::info!("systemd stopped");
     Ok(())
 }
 

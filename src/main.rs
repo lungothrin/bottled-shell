@@ -1,6 +1,6 @@
 fn main() {
     if let Err(_) = std::env::var("BOTTLED_SHELL_LOG") {
-        std::env::set_var("BOTTLED_SHELL_LOG", "trace");
+        std::env::set_var("BOTTLED_SHELL_LOG", "info");
     }
     pretty_env_logger::init_custom_env("BOTTLED_SHELL_LOG");
 
@@ -57,7 +57,7 @@ fn main() {
         }
     }
 
-    log::debug!("executing bottled shell: {:?}", args);
+    log::trace!("executing bottled shell: {:?}", args);
     nix::unistd::execv(
         &std::ffi::CString::new(bottled_cmd_path.as_str()).unwrap().as_c_str(),
         &args
