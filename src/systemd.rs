@@ -125,6 +125,16 @@ pub fn start_systemd() -> Result<(), SystemdError> {
     use nix::sched::CloneFlags;
     use nix::unistd::ForkResult;
 
+    if is_associated_with_systemd() {
+        log::debug!("systemd already started");
+        return Ok(());
+    }
+
+    if let Ok(Some(pid)) = get_systemd_pid() {
+        log::debug!("systemd already started, PID={}", pid);
+        return Ok(());
+    }
+
     check_permission()?;
 
     let systemd_bin = std::ffi::CString::new(get_systemd_bin().unwrap()).unwrap();
@@ -259,12 +269,22 @@ fn exec_systemd(systemd_bin: std::ffi::CString) {
 }
 
 pub fn stop_systemd() -> Result<(), SystemdError> {
+    if is_associated_with_systemd() {
+        kill_systemd(1)
+    } else if let Some(pid) = get_systemd_pid()? {
+        kill_systemd(pid)
+    } else {
+        log::debug!("systemd not running");
+        Ok(())
+    }
+}
+
+fn kill_systemd(pid: libc::pid_t) -> Result<(), SystemdError> {
     check_permission()?;
 
-    if let Some(pid) = get_systemd_pid()? {
-        log::trace!("sending SIGRTMIN + 4 to systemd(PID={})", pid);
-        unsafe { nix::libc::kill(pid, libc::SIGRTMIN() + 4); }
-    }
+    log::trace!("sending SIGRTMIN + 4 to systemd(PID={})", pid);
+    unsafe { nix::libc::kill(pid, libc::SIGRTMIN() + 4); }
+
     if std::fs::metadata(PID_FILE).is_ok() {
         log::trace!("removing {}", PID_FILE);
         std::fs::remove_file(PID_FILE)?;

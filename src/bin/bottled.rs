@@ -74,20 +74,10 @@ fn main() {
             }
         }
         ("start", _) => {
-            if systemd::is_associated_with_systemd() || None == systemd::get_systemd_pid().unwrap() {
-                log::info!("starting bottled systemd");
-                systemd::start_systemd().unwrap();
-            } else {
-                log::debug!("bottled systemd is running");
-            }
+            systemd::start_systemd().unwrap();
         }
         ("stop", _) => {
-            if let Ok(Some(_)) = systemd::get_systemd_pid() {
-                log::info!("stopping bottled systemd");
-                systemd::stop_systemd().unwrap();
-            } else {
-                log::debug!("bottled systemd not running");
-            }
+            systemd::stop_systemd().unwrap();
         }
         ("shell", Some(m)) => {
             let mut shell = "bash";
@@ -96,9 +86,6 @@ fn main() {
             };
             log::debug!("specified shell: {}", shell);
 
-            for (key, value) in std::env::vars() {
-                log::info!("{}: {}", key, value);
-            }
             let bottled_shell = if let Some((c, _)) = clap::crate_name!().rsplit_once('-') {
                 format!("{}-{}", c, shell)
             } else {

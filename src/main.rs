@@ -25,7 +25,7 @@ fn main() {
     });
 
     for (key, value) in std::env::vars() {
-        log::info!("{}: {}", key, value);
+        log::debug!("env {}: {}", key, value);
     }
 
     let bottled_cmd = if let Some((c, _)) = clap::crate_name!().rsplit_once('-') {
@@ -56,7 +56,6 @@ fn main() {
             args.push(std::ffi::CString::new(v.as_str()).unwrap());
         }
     }
-
 
     log::debug!("executing bottled shell: {:?}", args);
     nix::unistd::execv(
