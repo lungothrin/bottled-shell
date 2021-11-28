@@ -2,7 +2,7 @@
 
 Run systemd with namespace in WSL2. Inspired by [subsystemctl](https://github.com/sorah/subsystemctl)
 
-## Difference with other solutions
+## Difference from other solutions
 
 - Launch systemd-enabled shell from start menu & VSCode
 
@@ -26,7 +26,7 @@ sudo make install
 
 Suppose you are using `bash` as login shell.
 
-Create an alias for bottled-shell
+Create an alias for bottled-shell.
 
 ```bash
 sudo ln -s /opt/bottled-shell/bin/bottled-shell /opt/bottled-shell/bin/bottled-bash
