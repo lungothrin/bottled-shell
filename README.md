@@ -14,7 +14,8 @@ Run systemd with namespace in WSL2. Inspired by [subsystemctl](https://github.co
 Download installer from [release page](https://github.com/lungothrin/bottled-shell/releases), and execute it with root privilege.
 
 ```bash
-sudo bash installer-vx.x.x.sh 
+curl -LJO https://github.com/lungothrin/bottled-shell/releases/download/v0.1.0-alpha/installer-v0.1.0-alpha.sh
+sudo bash installer-v0.1.0-alpha.sh
 ```
 
 2. Set your login shell to  `bottled-shell`
