@@ -62,7 +62,10 @@ fn main() {
             }
         }
         ("is-running", _) => {
-            if let Ok(Some(pid)) = systemd::get_systemd_pid() {
+            if systemd::is_associated_with_systemd() {
+                log::debug!("is-running=true");
+                std::process::exit(libc::EXIT_SUCCESS);
+            } else if let Ok(Some(pid)) = systemd::get_systemd_pid() {
                 log::debug!("is-running=true, PID={}", pid);
                 std::process::exit(libc::EXIT_SUCCESS);
             } else {
